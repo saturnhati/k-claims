@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K-Claims</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('kc-theme')||'arcade');}catch(e){}</script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-logo">♡</span>
+        <div>
+          <h1>K-Claims</h1>
+          <p class="subtitle">album · POB · merch</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" id="btn-export-csv" title="Esporta CSV">CSV</button>
+        <button class="btn btn-ghost" id="btn-export-json" title="Esporta JSON">JSON</button>
+        <button class="btn btn-ghost icon-btn" id="btn-theme" title="Cambia tema"><span class="theme-dot"></span></button>
+        <button class="btn btn-primary" id="btn-new">+ Nuovo claim</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="year-tabs" id="year-tabs"></div>
+    <section class="summary" id="summary"></section>
+
+    <section class="dash-grid">
+      <div class="panel" id="panel-month">
+        <h2>Spesa per mese</h2>
+        <div id="month-list"></div>
+      </div>
+      <div class="panel" id="panel-gom">
+        <h2>Spesa per GOM</h2>
+        <div id="gom-list"></div>
+      </div>
+      <div class="panel" id="panel-member">
+        <h2>Spesa per membro</h2>
+        <div id="member-list"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="controls">
+        <input type="search" id="search" class="input search" placeholder="Cerca…" />
+        <div class="filters" id="filters"></div>
+        <button class="btn btn-ghost" id="btn-view">Per comeback</button>
+        <label class="chk"><input type="checkbox" id="filter-due" /> Solo da pagare</label>
+      </div>
+      <div class="table-wrap">
+        <div id="table-area"></div>
+      </div>
+      <p class="count" id="count"></p>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="modal" hidden>
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="modal-title">Nuovo claim</h2>
+        <button class="btn btn-ghost" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="claim-form">
+          <div id="form-fields" class="form-grid"></div>
+        </form>
+        <div class="modal-foot">
+          <button class="btn btn-danger" id="btn-delete" hidden>Elimina</button>
+          <span class="error" id="form-error"></span>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" id="btn-cancel">Annulla</button>
+            <button class="btn btn-ghost" id="btn-duplicate" hidden>Duplica</button>
+            <button class="btn btn-ghost" id="btn-edit-all" hidden>Modifica tutto</button>
+            <button class="btn btn-primary" id="btn-save">Salva</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" hidden>
+    <img id="lightbox-img" src="" alt="" />
+    <button class="btn btn-ghost lightbox-close" id="lightbox-close">✕</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "k-claims",
+  "version": "1.0.0",
+  "description": "Gestione claim kpop (album, POB, merch) su Notion",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
