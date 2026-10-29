@@ -5,22 +5,31 @@ import path from 'node:path';
 const NOTION_VERSION = '2022-06-28';
 const API = 'https://api.notion.com/v1';
 
-export function getToken() {
-  if (process.env.NOTION_TOKEN) return process.env.NOTION_TOKEN.trim();
-
+function readFromShell(name) {
   const home = os.homedir();
   const files = ['.zshenv', '.zshrc', '.zprofile', '.bash_profile', '.bashrc', '.profile'];
+  const re = new RegExp(`^\\s*(?:export\\s+)?${name}\\s*=\\s*["']?([^"'\n]+)["']?\\s*$`, 'm');
   for (const f of files) {
     const p = path.join(home, f);
     try {
       const content = fs.readFileSync(p, 'utf8');
-      const m = content.match(/^\s*(?:export\s+)?NOTION_TOKEN\s*=\s*["']?([^"'\n]+)["']?\s*$/m);
+      const m = content.match(re);
       if (m) return m[1].trim();
     } catch {
       // file non esistente, continua
     }
   }
   return null;
+}
+
+export function getToken() {
+  if (process.env.NOTION_TOKEN) return process.env.NOTION_TOKEN.trim();
+  return readFromShell('NOTION_TOKEN');
+}
+
+export function getDbId() {
+  if (process.env.NOTION_DB_ID) return process.env.NOTION_DB_ID.trim();
+  return readFromShell('NOTION_DB_ID');
 }
 
 async function notion(method, urlPath, body) {

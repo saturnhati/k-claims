@@ -1,3 +1,5 @@
+import { getDbId } from './notion.js';
+
 const FIELDS = {
   group: { key: 'Group', type: 'select' },
   comeback: { key: 'Comeback', type: 'select' },
@@ -25,9 +27,17 @@ const FIELDS = {
   images: { key: 'IMG', type: 'files' },
 };
 
+function resolveDbId() {
+  const id = getDbId();
+  if (!id) {
+    throw new Error('NOTION_DB_ID non trovato. Aggiungilo a ~/.zshenv o nell\'ambiente (es. export NOTION_DB_ID="...")');
+  }
+  return id;
+}
+
 export const DBS = {
   unified: {
-    id: 'your-database-id-here',
+    id: resolveDbId(),
     label: 'K-Claims',
     title: 'Item',
     archived: false,

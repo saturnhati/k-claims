@@ -23,31 +23,9 @@ const state = {
 const money = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' });
 const MONTHS = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
 
-const FRIENDS = new Set(['Friend', 'Friend', 'Friend']);
-const CANCELLED = new Set(['Cancelled']);
-const DONE = new Set(['Received']);
-const ARCHIVED = new Set(['Received', 'Cancelled', 'Gifted']);
-
 function isArchivedGroup(items) {
   return items.every((c) => ARCHIVED.has(c.status));
 }
-
-const CAT_LABEL = { Album: 'album', POB: 'POB', Merch: 'merch', Altro: 'altro' };
-
-const GROUP_MEMBERS = {
-  ATEEZ: ['Hongjoong', 'Seonghwa', 'Yunho', 'Yeosang', 'San', 'Mingi', 'Wooyoung', 'Jongho'],
-  SKZ: ['Bangchan', 'LeeKnow', 'Changbin', 'Hyunjin', 'Han', 'Felix', 'Seungmin', 'Jeongin'],
-  P1H: ['Keeho', 'Theo', 'Jiung', 'Intak', 'Soul', 'Jongseob'],
-  WayV: ['Kun', 'Ten', 'Xiaojun', 'Hendery', 'YangYang'],
-  'AMPERS&ONE': ['Jiho'],
-};
-
-const GROUP_COMEBACKS = {
-  ATEEZ: ['GHP4', 'GHP5', 'GHP6'],
-  P1H: ['UNIQUE', 'BLOW UP'],
-  BTS: ['ARIRANG'],
-  'AMPERS&ONE': ['Definitions'],
-};
 
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -88,7 +66,6 @@ function statusClass(s) {
   if (!s) return 'st-muted';
   if (DONE.has(s)) return 'st-done';
   if (CANCELLED.has(s)) return 'st-bad';
-  if (FRIENDS.has(s)) return 'st-friend';
   if (/claimed/i.test(s)) return 'st-claim';
   return 'st-progress';
 }
@@ -328,12 +305,6 @@ function filteredClaims() {
   });
 }
 
-const STATUS_RANK = {
-  Claimed: 0, 'Claimed & Waiting': 0, 'Shipped to Proxy': 1, Kaddy: 2, 'Shipped to GOM': 3, GOM: 4,
-  'Shipped to Friend': 5, 'Shipped to ME': 6, Friend: 7, Friend: 7, Friend: 7, Received: 9,
-  Gifted: 10, Cancelled: 11,
-};
-
 function sortValue(c, key) {
   switch (key) {
     case 'total': return claimTotal(c) || -1;
@@ -489,11 +460,14 @@ function claimValue(claim, key) {
   return claim?.[key] ?? '';
 }
 
+function memberFormOptions(group) {
+  if (group && GROUP_MEMBERS[group]) return GROUP_MEMBERS[group];
+  if (group) return optionsFor('members');
+  return [];
+}
+
 function formOptionsFor(spec, group) {
-  if (spec.opt === 'members') {
-    if (group && GROUP_MEMBERS[group]) return GROUP_MEMBERS[group];
-    return optionsFor('members');
-  }
+  if (spec.opt === 'members') return memberFormOptions(group);
   if (spec.opt === 'comeback') {
     if (group && GROUP_COMEBACKS[group]) return GROUP_COMEBACKS[group];
     return optionsFor('comeback');
@@ -523,9 +497,14 @@ function renderField(spec, value, group) {
     inner = `<select>${opts}</select>`;
   } else if (spec.kind === 'multi') {
     const vals = Array.isArray(value) ? value : [];
-    inner = `<div class="check-group">${formOptionsFor(spec, group)
-      .map((o) => `<label class="${vals.includes(o) ? 'on' : ''}" data-val="${esc(o)}">${esc(o)}</label>`)
-      .join('')}</div>`;
+    const opts = formOptionsFor(spec, group);
+    if (spec.opt === 'members' && !opts.length) {
+      inner = `<div class="check-group hint">Seleziona prima il gruppo</div>`;
+    } else {
+      inner = `<div class="check-group">${opts
+        .map((o) => `<label class="${vals.includes(o) ? 'on' : ''}" data-val="${esc(o)}">${esc(o)}</label>`)
+        .join('')}</div>`;
+    }
   }
 
   return `<div class="${cls}" data-key="${esc(spec.key)}">${label}${inner}</div>`;
@@ -534,7 +513,11 @@ function renderField(spec, value, group) {
 function updateFormMembers(group) {
   const container = document.querySelector('.field[data-key="members"] .check-group');
   if (!container) return;
-  const opts = group && GROUP_MEMBERS[group] ? GROUP_MEMBERS[group] : optionsFor('members');
+  const opts = memberFormOptions(group);
+  if (!opts.length) {
+    container.innerHTML = '<span class="hint">Seleziona prima il gruppo</span>';
+    return;
+  }
   const current = [...container.querySelectorAll('label.on')].map((l) => l.dataset.val);
   const keep = current.filter((v) => opts.includes(v));
   container.innerHTML = opts.map((o) => `<label class="${keep.includes(o) ? 'on' : ''}" data-val="${esc(o)}">${esc(o)}</label>`).join('');

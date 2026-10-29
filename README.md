@@ -67,9 +67,10 @@ Set the integration token as an environment variable (the server also reads `~/.
 
 ```sh
 export NOTION_TOKEN="ntn_..."
+export NOTION_DB_ID="your-database-id-here"
 ```
 
-> Note: the database ID is currently hardcoded in `server/normalize.js` (`DBS.unified.id`). Moving it to an environment variable is planned (see Roadmap).
+> Note: both variables are read from the environment or from `~/.zshenv` (see `server/notion.js` → `getToken()` / `getDbId()`).
 
 Share the database with the integration you created in step 1.
 
@@ -94,6 +95,7 @@ k-claims/
 └── public/            # vanilla HTML/CSS/JS frontend
     ├── index.html
     ├── style.css
+    ├── config.js      # editable config: group -> members/comebacks, status/category mappings
     └── app.js
 ```
 
@@ -102,11 +104,10 @@ The backend proxies all reads/writes to the Notion API; the token never leaves t
 ## Limitations
 
 - The Notion API cannot upload binary files — the `files` property only accepts external URLs. Uploaded images are stored locally in `public/uploads/` and referenced in Notion via a relative external URL.
-- Group → members/comebacks mapping is hardcoded in the frontend (`GROUP_MEMBERS`, `GROUP_COMEBACKS` in `public/app.js`).
+- Group → members/comebacks mapping and status/category classifications live in `public/config.js` (editable config, no code changes required).
 
 ## Roadmap
 
-- Move the Notion database ID and group mappings out of the code into configuration/environment.
 - Support an external image host (Imgur/S3/Cloudinary) for uploads.
 - Payment reminders with due dates.
 
