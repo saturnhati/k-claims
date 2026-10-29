@@ -63,14 +63,15 @@ Create a Notion database (or duplicate an existing one) with these properties:
 
 ### 3. Configure
 
-Set the integration token as an environment variable (the server also reads `~/.zshenv`):
+Set the integration token and database ID as environment variables (the server also reads them from `~/.zshenv`):
 
 ```sh
 export NOTION_TOKEN="ntn_..."
 export NOTION_DB_ID="your-database-id-here"
 ```
 
-> Note: both variables are read from the environment or from `~/.zshenv` (see `server/notion.js` → `getToken()` / `getDbId()`).
+- `NOTION_TOKEN` is the secret from step 1.
+- `NOTION_DB_ID` is the database's ID: the 32-character string in the database URL (`notion.so/<workspace>/<id>?v=...`).
 
 Share the database with the integration you created in step 1.
 
