@@ -113,4 +113,4 @@ The backend proxies all reads/writes to the Notion API; the token never leaves t
 
 ## License
 
-To be decided.
+[MIT](LICENSE)

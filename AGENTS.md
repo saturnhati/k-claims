@@ -41,7 +41,7 @@ Endpoint API principali: `GET /api/meta`, `GET /api/claims`, `POST /api/claims`,
 
 ## Git / GitHub
 
-Repo **privata**: `https://github.com/saturnhati/k-claims` (remote SSH `git@github.com:saturnhati/k-claims.git`, branch `main`).
+Repo **pubblica**: `https://github.com/saturnhati/k-claims` (remote SSH `git@github.com:saturnhati/k-claims.git`, branch `main`).
 Commit/push: `git add -A && git commit -m "..." && git push`.
 `.gitignore` esclude `node_modules/`, `public/uploads/`, `.DS_Store`, `*.log`, `.env`.
 
@@ -52,7 +52,7 @@ Commit/push: `git add -A && git commit -m "..." && git push`.
 3. **Immagini**: oggi usano il server locale; per l'open-source serve un host esterno (Imgur/S3/Cloudinary) o documentare il funzionamento locale.
 4. ~~Rimuovere/rendere opzionali i riferimenti hardcoded~~ → fatto: status/categoria spostati in `public/config.js`, rimossi i `FRIENDS`; i link GOM restano `instagram.com` (scelta voluta).
 5. Aggiungere un **README** (requisiti, setup token Notion, come creare il DB, avvio).
-6. Scegliere una **licenza** (es. MIT).
+6. ~~Scegliere una licenza~~ → fatto: MIT (`LICENSE`).
 
 ## Idee future (non implementate)
 
