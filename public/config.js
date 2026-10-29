@@ -40,6 +40,5 @@ const CAT_LABEL = { Album: 'album', POB: 'POB', Merch: 'merch', Altro: 'altro' }
 
 // ===== Ordine di ordinamento degli status (numero più basso = prima) =====
 const STATUS_RANK = {
-  Claimed: 0, 'Claimed & Waiting': 0, 'Shipped to Proxy': 1, Kaddy: 2, 'Shipped to GOM': 3, GOM: 4,
-  'Shipped to Friend': 5, 'Shipped to ME': 6, Received: 9, Gifted: 10, Cancelled: 11,
+  'Claimed & Waiting': 0, Proxy: 1, GOM: 2, Friend: 3, Received: 4, Gifted: 5, Cancelled: 6,
 };
